@@ -1,0 +1,161 @@
+
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server Compact Edition
+-- --------------------------------------------------
+-- Date Created: 03/16/2018 03:41:08
+-- Generated from EDMX file: C:\Users\socoolkuku\Google 雲端硬碟\Codez\PhotoGrouping\ImageBrowser\Data\Model.edmx
+-- --------------------------------------------------
+
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- NOTE: if the constraint does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    ALTER TABLE [Thumb] DROP CONSTRAINT [FK_belongTo];
+GO
+    ALTER TABLE [TagFile] DROP CONSTRAINT [FK_fileTo];
+GO
+    ALTER TABLE [TagFile] DROP CONSTRAINT [FK_tagTo];
+GO
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- NOTE: if the table does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    DROP TABLE [File];
+GO
+    DROP TABLE [Tag];
+GO
+    DROP TABLE [TagFile];
+GO
+    DROP TABLE [Thumb];
+GO
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'File'
+CREATE TABLE [File] (
+    [id] uniqueidentifier  NOT NULL,
+    [name] nvarchar(500)  NOT NULL,
+    [path] nvarchar(500)  NOT NULL,
+    [width] nvarchar(500)  NOT NULL,
+    [height] nvarchar(500)  NOT NULL,
+    [orientation] nvarchar(100)  NOT NULL,
+    [hash] nvarchar(500)  NOT NULL,
+    [create] datetime  NOT NULL,
+    [modify] datetime  NOT NULL,
+    [active] bit  NOT NULL
+);
+GO
+
+-- Creating table 'Tag'
+CREATE TABLE [Tag] (
+    [id] uniqueidentifier  NOT NULL,
+    [name] nvarchar(100)  NOT NULL,
+    [create] datetime  NOT NULL,
+    [modify] datetime  NOT NULL,
+    [active] bit  NOT NULL,
+    [count] int  NOT NULL
+);
+GO
+
+-- Creating table 'TagFile'
+CREATE TABLE [TagFile] (
+    [id] uniqueidentifier  NOT NULL,
+    [tagId] uniqueidentifier  NOT NULL,
+    [fileId] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'Thumb'
+CREATE TABLE [Thumb] (
+    [id] uniqueidentifier  NOT NULL,
+    [fileId] uniqueidentifier  NOT NULL,
+    [image] varbinary(8000)  NOT NULL,
+    [create] datetime  NOT NULL,
+    [modify] datetime  NOT NULL,
+    [active] bit  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [id] in table 'File'
+ALTER TABLE [File]
+ADD CONSTRAINT [PK_File]
+    PRIMARY KEY ([id] );
+GO
+
+-- Creating primary key on [id] in table 'Tag'
+ALTER TABLE [Tag]
+ADD CONSTRAINT [PK_Tag]
+    PRIMARY KEY ([id] );
+GO
+
+-- Creating primary key on [id] in table 'TagFile'
+ALTER TABLE [TagFile]
+ADD CONSTRAINT [PK_TagFile]
+    PRIMARY KEY ([id] );
+GO
+
+-- Creating primary key on [id] in table 'Thumb'
+ALTER TABLE [Thumb]
+ADD CONSTRAINT [PK_Thumb]
+    PRIMARY KEY ([id] );
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [fileId] in table 'Thumb'
+ALTER TABLE [Thumb]
+ADD CONSTRAINT [FK_belongTo]
+    FOREIGN KEY ([fileId])
+    REFERENCES [File]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_belongTo'
+CREATE INDEX [IX_FK_belongTo]
+ON [Thumb]
+    ([fileId]);
+GO
+
+-- Creating foreign key on [fileId] in table 'TagFile'
+ALTER TABLE [TagFile]
+ADD CONSTRAINT [FK_fileTo]
+    FOREIGN KEY ([fileId])
+    REFERENCES [File]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_fileTo'
+CREATE INDEX [IX_FK_fileTo]
+ON [TagFile]
+    ([fileId]);
+GO
+
+-- Creating foreign key on [tagId] in table 'TagFile'
+ALTER TABLE [TagFile]
+ADD CONSTRAINT [FK_tagTo]
+    FOREIGN KEY ([tagId])
+    REFERENCES [Tag]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_tagTo'
+CREATE INDEX [IX_FK_tagTo]
+ON [TagFile]
+    ([tagId]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------
